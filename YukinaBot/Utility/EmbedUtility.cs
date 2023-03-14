@@ -1,4 +1,5 @@
 ﻿using Discord;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using YukinaBot.Enums;
@@ -21,7 +22,7 @@ namespace YukinaBot.Utility
             // Second row.
             embedBuilder.AddField("**Status**", media.Status, true);
 
-            // Second part of second row differs for anime and manga.
+            // Second part of second row differs for Anime and Manga.
             if (media.Type == MediaType.Anime)
                 embedBuilder.AddField("**Episodes**", media.Episodes != null ? $"{media.Episodes}" : "?", true)
                     .AddField("**Duration**", $"{media.Duration} minutes per episode", true);
@@ -43,6 +44,44 @@ namespace YukinaBot.Utility
                 .WithDescription($"_{Regex.Replace(media.Description, "(<\\/?\\w+>)", " ")}_")
                 .WithThumbnailUrl(media.CoverImage.ExtraLarge)
                 .WithUrl(media.SiteUrl);
+
+            return embedBuilder.Build();
+        }
+
+        public Embed BuildUserEmbed(User? user, bool withAnime = true, bool withManga = true)
+        {
+            var embedBuilder = new EmbedBuilder();
+            var stringBuilder = new StringBuilder();
+
+            // Build custom description for displaying Anime
+            if (withAnime)
+            {
+                stringBuilder.Append("\n**Anime Statistics**\n");
+                stringBuilder.Append($"`Total Entries` {user.Statistics.Anime.Count.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"`Episodes Watched` {user.Statistics.Anime.EpisodesWatched.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                TimeSpan t = TimeSpan.FromMinutes(user.Statistics.Anime.MinutesWatched);
+                stringBuilder.Append($"`Time Watched` {t.Days:00} Days - {t.Hours:00} Hours - {t.Minutes:00} Minutes\n");
+                stringBuilder.Append($"`Mean Score` {user.Statistics.Anime.MeanScore.ToString("N2", CultureInfo.InvariantCulture)}\n");
+            }
+
+            if (withManga)
+            {
+                stringBuilder.Append("\n**Manga Statistics**\n");
+                stringBuilder.Append($"`Total Entries` {user.Statistics.Manga.Count.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"`Volumes Read` {user.Statistics.Manga.VolumesRead.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"`Chapters Read` {user.Statistics.Manga.ChaptersRead.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"`Mean Score` {user.Statistics.Manga.MeanScore.ToString("N2", CultureInfo.InvariantCulture)}\n");
+            }
+
+            embedBuilder.WithDescription(stringBuilder.ToString());
+
+            // Add all extra properties.
+            embedBuilder.WithColor(Color.DarkPurple)
+                .WithCurrentTimestamp()
+                .WithImageUrl(user.BannerImage)
+                .WithThumbnailUrl(user.Avatar.Large)
+                .WithTitle(user.Name)
+                .WithUrl(user.SiteUrl);
 
             return embedBuilder.Build();
         }
