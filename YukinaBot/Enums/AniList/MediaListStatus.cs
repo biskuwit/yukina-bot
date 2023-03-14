@@ -1,4 +1,4 @@
-﻿namespace YukinaBot.Enums
+﻿namespace YukinaBot.Enums.AniList
 {
     public enum MediaListStatus
     {

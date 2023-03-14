@@ -1,4 +1,4 @@
-﻿namespace YukinaBot.Models
+﻿namespace YukinaBot.Models.AniList
 {
     public class ScoreDistribution
     {

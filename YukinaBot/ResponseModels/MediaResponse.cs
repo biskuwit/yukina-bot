@@ -1,4 +1,4 @@
-﻿using YukinaBot.Models;
+﻿using YukinaBot.Models.AniList;
 
 namespace YukinaBot.ResponseModels
 {

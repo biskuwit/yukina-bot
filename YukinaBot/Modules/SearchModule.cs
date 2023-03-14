@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
 using System.Text;
-using YukinaBot.Enums;
+using YukinaBot.Enums.AniList;
 
 namespace YukinaBot.Modules
 {

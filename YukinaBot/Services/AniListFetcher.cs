@@ -30,6 +30,8 @@ namespace YukinaBot.Services
                         type
                         status
                         description
+                        season
+                        seasonYear
                         episodes
                         duration
                         chapters
@@ -40,6 +42,7 @@ namespace YukinaBot.Services
                         genres
                         meanScore
                         popularity
+                        favourites
                         siteUrl
                     }
                 }
@@ -78,6 +81,8 @@ namespace YukinaBot.Services
                             type
                             status
                             description
+                            season
+                            seasonYear
                             episodes
                             duration
                             chapters
@@ -88,6 +93,7 @@ namespace YukinaBot.Services
                             genres
                             meanScore
                             popularity
+                            favourites
                             siteUrl
                         }
                     }
@@ -118,6 +124,8 @@ namespace YukinaBot.Services
                         type
                         status
                         description
+                        season
+                        seasonYear
                         episodes
                         duration
                         chapters
@@ -128,6 +136,7 @@ namespace YukinaBot.Services
                         genres
                         meanScore
                         popularity
+                        favourites
                         siteUrl
                     }
                 }";
@@ -154,6 +163,8 @@ namespace YukinaBot.Services
                         type
                         status
                         description
+                        season
+                        seasonYear
                         episodes
                         duration
                         chapters
@@ -164,6 +175,7 @@ namespace YukinaBot.Services
                         genres
                         meanScore
                         popularity
+                        favourites
                         siteUrl
                     }
                 }";
@@ -220,6 +232,43 @@ namespace YukinaBot.Services
             };
 
             return await _graphQLUtility.ExecuteGraphQLRequest<UserResponse>(query, variables);
+        }
+
+        public async Task<MediaListCollectionResponse> FindUserListAsync(string username, string mediaType)
+        {
+            string query = @"
+                query ($userName: String, $type: MediaType) {
+                    MediaListCollection(userName: $userName, type: $type) {
+                        lists {
+                            entries {
+                                mediaId
+                                status
+                                score(format:POINT_100)
+                                progress
+                                media {
+                                    id
+                                    title {
+                                        english
+                                        romaji
+                                        native
+                                    }
+                                    type
+                                    status
+                                }
+                            }
+                            name
+                            status
+                        }
+                    }
+                }";
+
+            object variables = new
+            {
+                userName = username,
+                type = mediaType
+            };
+
+            return await _graphQLUtility.ExecuteGraphQLRequest<MediaListCollectionResponse>(query, variables);
         }
     }
 }

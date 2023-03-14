@@ -1,13 +1,12 @@
 ﻿using Discord.Commands;
-using YukinaBot.Enums;
+using YukinaBot.Enums.AniList;
 
 namespace YukinaBot.Modules
 {
-    [Group("find")]
-    [Alias("fetch")]
     public class FindModule : AbstractModule
     {
-        [Command]
+        [Command("find")]
+        [Alias("fetch")]
         [Summary("Find media from AniList GraphQL.")]
         public async Task FindAsync([Remainder] string searchCriteria)
         {

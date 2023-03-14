@@ -1,6 +1,6 @@
-﻿using YukinaBot.Enums;
+﻿using YukinaBot.Enums.AniList;
 
-namespace YukinaBot.Models
+namespace YukinaBot.Models.AniList
 {
     public class MediaList
     {

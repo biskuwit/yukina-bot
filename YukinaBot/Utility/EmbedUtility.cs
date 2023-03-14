@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using YukinaBot.Enums;
-using YukinaBot.Models;
+using YukinaBot.Enums.AniList;
+using YukinaBot.Models.AniList;
 
 namespace YukinaBot.Utility
 {
@@ -16,13 +16,15 @@ namespace YukinaBot.Utility
             // First row.
             embedBuilder.WithTitle(media.Title.English ?? media.Title.Romaji)
                 .AddField("**Type**", media.Type, true)
-                .AddField("**Anilist Score**", media.MeanScore, true)
-                .AddField("**Popularity**", media.Popularity, true);
+                .AddField("**Status**", media.Status, true)
+                .AddField("**Aired**", $"{media.Season} {media.SeasonYear}", true);
 
             // Second row.
-            embedBuilder.AddField("**Status**", media.Status, true);
+            embedBuilder.AddField("**Anilist Score**", $"{media.MeanScore}/100", true)
+                .AddField("**Popularity**", media.Popularity, true)
+                .AddField("**Favorited**", $"{media.Favorites} times", true);
 
-            // Second part of second row differs for Anime and Manga.
+            // Third row differs for Anime and Manga.
             if (media.Type == MediaType.Anime)
                 embedBuilder.AddField("**Episodes**", media.Episodes != null ? $"{media.Episodes}" : "?", true)
                     .AddField("**Duration**", $"{media.Duration} minutes per episode", true);
@@ -39,7 +41,7 @@ namespace YukinaBot.Utility
 
             // Add all extra properties.
             embedBuilder.WithColor(Color.Green)
-                .WithCurrentTimestamp()
+                // .WithCurrentTimestamp()
                 // Remove all the HTML elements from the description.
                 .WithDescription($"_{Regex.Replace(media.Description, "(<\\/?\\w+>)", " ")}_")
                 .WithThumbnailUrl(media.CoverImage.ExtraLarge)
@@ -77,7 +79,7 @@ namespace YukinaBot.Utility
 
             // Add all extra properties.
             embedBuilder.WithColor(Color.DarkPurple)
-                .WithCurrentTimestamp()
+                // .WithCurrentTimestamp()
                 .WithImageUrl(user.BannerImage)
                 .WithThumbnailUrl(user.Avatar.Large)
                 .WithTitle(user.Name)

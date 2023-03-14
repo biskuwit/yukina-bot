@@ -6,7 +6,7 @@ namespace YukinaBot.Modules
 {
     public abstract class AbstractModule : ModuleBase<SocketCommandContext>
     {
-        public AniListFetcher AniListFetcher = new();
-        public EmbedUtility EmbedUtility = new();
+        protected AniListFetcher AniListFetcher = new();
+        protected EmbedUtility EmbedUtility = new();
     }
 }

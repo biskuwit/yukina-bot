@@ -1,6 +1,6 @@
-﻿using YukinaBot.Enums;
+﻿using YukinaBot.Enums.AniList;
 
-namespace YukinaBot.Models
+namespace YukinaBot.Models.AniList
 {
     public class Media
     {
@@ -13,7 +13,7 @@ namespace YukinaBot.Models
         public string? Description { get; set; }
         public FuzzyDate? StartDate { get; set; }
         public FuzzyDate? EndDate { get; set; }
-        // public MediaSeason Season { get; set; }
+        public MediaSeason Season { get; set; }
         public int? SeasonYear { get; set; }
         public int? SeasonInt { get; set; }
         public int? Episodes { get; set; }
