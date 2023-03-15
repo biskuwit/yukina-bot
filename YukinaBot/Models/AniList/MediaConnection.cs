@@ -2,8 +2,8 @@
 {
     public class MediaConnection
     {
-        public List<MediaEdge> edges { get; set; }
-        public List<Media> nodes { get; set; }
-        public PageInfo pageInfo { get; set; }
+        public List<MediaEdge>? Edges { get; set; }
+        public List<Media>? Nodes { get; set; }
+        public PageInfo? PageInfo { get; set; }
     }
 }

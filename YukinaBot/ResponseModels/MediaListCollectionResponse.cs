@@ -4,6 +4,6 @@ namespace YukinaBot.ResponseModels
 {
     public class MediaListCollectionResponse
     {
-        public MediaListCollection mediaListCollection { get; set; }
+        public MediaListCollection? MediaListCollection { get; set; }
     }
 }

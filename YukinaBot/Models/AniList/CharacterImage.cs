@@ -2,7 +2,7 @@
 {
     public class CharacterImage
     {
-        public string large { get; set; }
-        public string medium { get; set; }
+        public string? Large { get; set; }
+        public string? Medium { get; set; }
     }
 }
