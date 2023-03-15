@@ -26,9 +26,10 @@ namespace YukinaBot.Modules
                     await FindMangaAsync(string.Join(' ', arguments.Skip(1)));
                     break;
                 default:
-                    var mediaResponse = await AniListFetcher.FindMediaAsync(searchCriteria);
-                    var embedMediaList = FetchMediaStatsForUser(mediaResponse.Media);
-                    await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(mediaResponse.Media, embedMediaList));
+                    var pageResponse = await AniListFetcher.SearchMediaAsync(searchCriteria);
+                    var media = LevenshteinUtility.GetSingleBestResult(searchCriteria, pageResponse.Page?.Media);
+                    var embedMediaList = FetchMediaStatsForUser(media);
+                    await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(media, embedMediaList));
                     break;
             }
         }
@@ -36,18 +37,20 @@ namespace YukinaBot.Modules
         [Summary("Find anime media from AniList GraphQL.")]
         public async Task FindAnimeAsync([Remainder] string searchCriteria)
         {
-            var mediaResponse = await AniListFetcher.FindMediaTypeAsync(searchCriteria, MediaType.Anime.ToString().ToUpper());
-            var embedMediaList = FetchMediaStatsForUser(mediaResponse.Media);
-            await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(mediaResponse.Media, embedMediaList));
+            var pageResponse = await AniListFetcher.SearchMediaTypeAsync(searchCriteria, MediaType.Anime.ToString().ToUpper());
+            var media = LevenshteinUtility.GetSingleBestResult(searchCriteria, pageResponse.Page?.Media);
+            var embedMediaList = FetchMediaStatsForUser(media);
+            await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(media, embedMediaList));
         }
 
         [Command("manga")]
         [Summary("Find manga media from AniList GraphQL.")]
         public async Task FindMangaAsync([Remainder] string searchCriteria)
         {
-            var mediaResponse = await AniListFetcher.FindMediaTypeAsync(searchCriteria, MediaType.Manga.ToString().ToUpper());
-            var embedMediaList = FetchMediaStatsForUser(mediaResponse.Media);
-            await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(mediaResponse.Media, embedMediaList));
+            var pageResponse = await AniListFetcher.SearchMediaTypeAsync(searchCriteria, MediaType.Manga.ToString().ToUpper());
+            var media = LevenshteinUtility.GetSingleBestResult(searchCriteria, pageResponse.Page?.Media);
+            var embedMediaList = FetchMediaStatsForUser(media);
+            await ReplyAsync("", false, EmbedUtility.BuildAnilistMediaEmbed(media, embedMediaList));
         }
 
         private List<EmbedMedia> FetchMediaStatsForUser(Media? media)

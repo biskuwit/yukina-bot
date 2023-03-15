@@ -10,6 +10,7 @@ namespace YukinaBot.Modules
     {
         protected AniListFetcher AniListFetcher = new();
         protected EmbedUtility EmbedUtility = new();
+        protected LevenshteinUtility LevenshteinUtility = new();
         protected MongoDbUtility MongoDbUtility = new();
         protected MongoClient MongoClient = new(ConfigurationHelper.GetMongoDbConnectionUri());
     }

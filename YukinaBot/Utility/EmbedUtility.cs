@@ -94,11 +94,15 @@ namespace YukinaBot.Utility
                 embedBuilder.AddField("**User Scores**", stringBuilder.ToString());
             }
 
+            if (media.Description != null)
+            {
+                // Remove all the HTML elements from the description.
+                embedBuilder.WithDescription($"[MyAnimeList Alternative](https://myanimelist.net/anime/{media.IdMal})\n\n_{Regex.Replace(media.Description, "(<\\/?\\w+>)", " ")}_");
+            }
+
             // Add all extra properties.
             embedBuilder.WithColor(Color.Green)
                 // .WithCurrentTimestamp()
-                // Remove all the HTML elements from the description.
-                .WithDescription($"_{Regex.Replace(media.Description, "(<\\/?\\w+>)", " ")}_")
                 .WithThumbnailUrl(media.CoverImage.ExtraLarge)
                 .WithUrl(media.SiteUrl);
 
@@ -113,17 +117,17 @@ namespace YukinaBot.Utility
             // Build custom description for displaying Anime
             if (withAnime)
             {
-                stringBuilder.Append("\n**Anime Statistics**\n");
-                stringBuilder.Append($"`Total Entries` {user.Statistics.Anime.Count.ToString("N0", CultureInfo.InvariantCulture)}\n");
-                stringBuilder.Append($"`Episodes Watched` {user.Statistics.Anime.EpisodesWatched.ToString("N0", CultureInfo.InvariantCulture)}\n");
-                TimeSpan t = TimeSpan.FromMinutes(user.Statistics.Anime.MinutesWatched);
-                stringBuilder.Append($"`Time Watched` {t.Days:00} Days - {t.Hours:00} Hours - {t.Minutes:00} Minutes\n");
-                stringBuilder.Append($"`Mean Score` {user.Statistics.Anime.MeanScore.ToString("N2", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"\n[**Anime List**]({user.SiteUrl}/animelist)\n");
+                stringBuilder.Append($"_Total Entries:_ {user.Statistics.Anime.Count.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                stringBuilder.Append($"_Episodes Watched:_ {user.Statistics.Anime.EpisodesWatched.ToString("N0", CultureInfo.InvariantCulture)}\n");
+                var t = TimeSpan.FromMinutes(user.Statistics.Anime.MinutesWatched);
+                stringBuilder.Append($"_Time Watched:_ {t.Days:00} Days - {t.Hours:00} Hours - {t.Minutes:00} Minutes\n");
+                stringBuilder.Append($"_Mean Score:_ {user.Statistics.Anime.MeanScore.ToString("N2", CultureInfo.InvariantCulture)}\n");
             }
 
             if (withManga)
             {
-                stringBuilder.Append("\n**Manga Statistics**\n");
+                stringBuilder.Append($"\n[**Manga List**]({user.SiteUrl}/mangalist)\n");
                 stringBuilder.Append($"`Total Entries` {user.Statistics.Manga.Count.ToString("N0", CultureInfo.InvariantCulture)}\n");
                 stringBuilder.Append($"`Volumes Read` {user.Statistics.Manga.VolumesRead.ToString("N0", CultureInfo.InvariantCulture)}\n");
                 stringBuilder.Append($"`Chapters Read` {user.Statistics.Manga.ChaptersRead.ToString("N0", CultureInfo.InvariantCulture)}\n");
@@ -137,7 +141,7 @@ namespace YukinaBot.Utility
                 // .WithCurrentTimestamp()
                 .WithImageUrl(user.BannerImage)
                 .WithThumbnailUrl(user.Avatar.Large)
-                .WithTitle(user.Name)
+                .WithTitle($"{user.Name} AniList Statistics")
                 .WithUrl(user.SiteUrl);
 
             return embedBuilder.Build();

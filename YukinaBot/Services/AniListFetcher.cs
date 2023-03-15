@@ -40,6 +40,7 @@ namespace YukinaBot.Services
                             extraLarge
                         }
                         genres
+                        synonyms
                         meanScore
                         popularity
                         favourites
@@ -91,6 +92,7 @@ namespace YukinaBot.Services
                                 extraLarge
                             }
                             genres
+                            synonyms
                             meanScore
                             popularity
                             favourites
@@ -116,6 +118,7 @@ namespace YukinaBot.Services
                 query ($search: String) {
                     Media (search: $search) {
                         id
+                        idMal
                         title {
                             english
                             romaji
@@ -134,6 +137,7 @@ namespace YukinaBot.Services
                             extraLarge
                         }
                         genres
+                        synonyms
                         meanScore
                         popularity
                         favourites
@@ -155,6 +159,7 @@ namespace YukinaBot.Services
                 query ($search: String, $type: MediaType) {
                     Media (search: $search, type: $type) {
                         id
+                        idMal
                         title {
                             english
                             romaji
@@ -173,6 +178,7 @@ namespace YukinaBot.Services
                             extraLarge
                         }
                         genres
+                        synonyms
                         meanScore
                         popularity
                         favourites

@@ -29,6 +29,7 @@ namespace YukinaBot
 
             await _client.LoginAsync(TokenType.Bot, ConfigurationHelper.GetToken());
             await _client.StartAsync();
+            await _client.SetGameAsync($"{ConfigurationHelper.GetBotPrefix()}help", null, ActivityType.Listening);
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
