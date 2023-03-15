@@ -8,7 +8,7 @@ namespace YukinaBot.Services
         private readonly GraphQLUtility _graphQLUtility = new("https://graphql.anilist.co");
 
         public async Task<PageResponse> SearchMediaAsync(string searchCriteria, int startPage = 1,
-            int entriesPerPage = 10)
+            int entriesPerPage = 25)
         {
             var query = @"
             query ($page: Int, $perPage: Int, $search: String) {
@@ -59,7 +59,7 @@ namespace YukinaBot.Services
         }
 
         public async Task<PageResponse> SearchMediaTypeAsync(string searchCriteria, string mediaType, int startPage = 1,
-            int entriesPerPage = 10)
+            int entriesPerPage = 25)
         {
             var query = @"
                 query ($page: Int, $perPage: Int, $search: String, $type: MediaType) {

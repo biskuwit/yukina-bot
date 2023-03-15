@@ -13,7 +13,7 @@ namespace YukinaBot.Models.AniList
         public string? Description { get; set; }
         public FuzzyDate? StartDate { get; set; }
         public FuzzyDate? EndDate { get; set; }
-        public MediaSeason Season { get; set; }
+        public MediaSeason? Season { get; set; }
         public int? SeasonYear { get; set; }
         public int? SeasonInt { get; set; }
         public int? Episodes { get; set; }

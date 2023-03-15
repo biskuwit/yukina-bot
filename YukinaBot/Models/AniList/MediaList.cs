@@ -7,8 +7,8 @@ namespace YukinaBot.Models.AniList
         public int? Id { get; set; }
         public int? MediaId { get; set; }
         public MediaListStatus? Status { get; set; }
-        public float? Score { get; set; }
-        public int? Progress { get; set; }
+        public float Score { get; set; }
+        public int Progress { get; set; }
         public int? ProgressVolumes { get; set; }
         public int? Repeat { get; set; }
         public int? Priority { get; set; }

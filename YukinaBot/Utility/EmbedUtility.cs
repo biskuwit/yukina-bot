@@ -2,32 +2,36 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using YukinaBot.Enums;
 using YukinaBot.Enums.AniList;
+using YukinaBot.Models;
 using YukinaBot.Models.AniList;
 
 namespace YukinaBot.Utility
 {
     public class EmbedUtility
     {
-        public Embed BuildAnilistMediaEmbed(Media? media)
+        public Embed BuildAnilistMediaEmbed(Media? media, List<EmbedMedia>? embedMediaList)
         {
             var embedBuilder = new EmbedBuilder();
+            var season = media.Season != null ? media.Season.ToString() : "?";
+            var seasonYear = media.SeasonYear != null ? media.SeasonYear.ToString() : "?";
 
             // First row.
             embedBuilder.WithTitle(media.Title.English ?? media.Title.Romaji)
                 .AddField("**Type**", media.Type, true)
                 .AddField("**Status**", media.Status, true)
-                .AddField("**Aired**", $"{media.Season} {media.SeasonYear}", true);
+                .AddField("**Season**", $"{season} {seasonYear}", true);
 
             // Second row.
-            embedBuilder.AddField("**Anilist Score**", $"{media.MeanScore}/100", true)
+            embedBuilder.AddField("**Anilist Score**", media.MeanScore != null ? $"{media.MeanScore}/100" : "-", true)
                 .AddField("**Popularity**", media.Popularity, true)
                 .AddField("**Favorited**", $"{media.Favorites} times", true);
 
             // Third row differs for Anime and Manga.
             if (media.Type == MediaType.Anime)
                 embedBuilder.AddField("**Episodes**", media.Episodes != null ? $"{media.Episodes}" : "?", true)
-                    .AddField("**Duration**", $"{media.Duration} minutes per episode", true);
+                    .AddField("**Duration**", media.Duration != null ? $"{media.Duration} minutes per episode" : "?", true);
             else
                 embedBuilder.AddField("**Volumes**", media.Volumes != null ? $"{media.Volumes}" : "?", true)
                     .AddField("**Chapters**", media.Chapters != null ? $"{media.Chapters}" : "?", true);
@@ -38,6 +42,57 @@ namespace YukinaBot.Utility
             stringBuilder.Append(string.Join("` - `", media.Genres));
             stringBuilder.Append("`");
             embedBuilder.AddField("**Genres**", stringBuilder.ToString());
+
+            // Fifth row with user statistics.
+            if (embedMediaList != null && embedMediaList.Count != 0)
+            {
+                stringBuilder.Clear();
+
+                var completedStringBuilder = new StringBuilder();
+                var plannedStringBuilder = new StringBuilder();
+                var inProgressStringBuilder = new StringBuilder();
+                var droppedStringBuilder = new StringBuilder();
+                var notOnListStringBuilder = new StringBuilder();
+
+                foreach (var embedMedia in embedMediaList.OrderBy(s => s.Progress).ThenBy(s => s.DiscordName))
+                {
+                    switch (embedMedia.Status)
+                    {
+                        case EmbedMediaListStatus.Completed:
+                            completedStringBuilder.Append($"{embedMedia.DiscordName} [{embedMedia.Score}/100] ~ ");
+                            break;
+                        case EmbedMediaListStatus.Current:
+                            inProgressStringBuilder.Append($"{embedMedia.DiscordName} [{embedMedia.Progress}] ~ ");
+                            break;
+                        case EmbedMediaListStatus.Dropped:
+                            droppedStringBuilder.Append($"{embedMedia.DiscordName} [{embedMedia.Progress}] ~ ");
+                            break;
+                        case EmbedMediaListStatus.Paused:
+                            inProgressStringBuilder.Append($"{embedMedia.DiscordName} [{embedMedia.Progress}] ~ ");
+                            break;
+                        case EmbedMediaListStatus.Planning:
+                            plannedStringBuilder.Append($"{embedMedia.DiscordName} ~ ");
+                            break;
+                        default:
+                            notOnListStringBuilder.Append($"{embedMedia.DiscordName} ~ ");
+                            break;
+                    }
+                }
+
+                var inProgress = inProgressStringBuilder.ToString().TrimEnd(' ', '~');
+                var completed = completedStringBuilder.ToString().TrimEnd(' ', '~');
+                var dropped = droppedStringBuilder.ToString().TrimEnd(' ', '~');
+                var planned = plannedStringBuilder.ToString().TrimEnd(' ', '~');
+                var notOnList = notOnListStringBuilder.ToString().TrimEnd(' ', '~');
+
+                stringBuilder.Append($"**In-Progress**: {inProgress}\n");
+                stringBuilder.Append($"**Completed**: {completed}\n");
+                stringBuilder.Append($"**Dropped**: {dropped}\n");
+                stringBuilder.Append($"**Planning**: {planned}\n");
+                stringBuilder.Append($"**Not on List**: {notOnList}");
+
+                embedBuilder.AddField("**User Scores**", stringBuilder.ToString());
+            }
 
             // Add all extra properties.
             embedBuilder.WithColor(Color.Green)
