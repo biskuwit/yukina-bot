@@ -97,7 +97,7 @@ namespace YukinaBot.Utility
             if (media.Description != null)
             {
                 // Remove all the HTML elements from the description.
-                embedBuilder.WithDescription($"[MyAnimeList Alternative](https://myanimelist.net/anime/{media.IdMal})\n\n_{Regex.Replace(media.Description, "(<\\/?\\w+>)", " ")}_");
+                embedBuilder.WithDescription($"[MyAnimeList Alternative](https://myanimelist.net/{media.Type.ToString().ToLower()}/{media.IdMal})\n\n{media.Description}");
             }
 
             // Add all extra properties.

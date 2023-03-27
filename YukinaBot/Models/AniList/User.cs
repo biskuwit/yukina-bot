@@ -2,12 +2,13 @@
 {
     public class User
     {
-        public string Name { get; set; } = string.Empty;
-        public string About { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? About { get; set; }
         public UserAvatar? Avatar { get; set; }
-        public string BannerImage { get; set; } = string.Empty;
-        public UserStatisticTypes Statistics { get; set; } = new();
-        public string SiteUrl { get; set; } = string.Empty;
+        public string? BannerImage { get; set; }
+        public UserStatisticTypes? Statistics { get; set; }
+        public string? SiteUrl { get; set; }
         public int UpdatedAt { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     {
         Finished,
         Releasing,
-        NotYetReleased,
+        Not_Yet_Released,
         Cancelled
     }
 }
